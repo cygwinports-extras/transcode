@@ -1,0 +1,92 @@
+transcode
+------------------------------------------
+Transcode is a suite of tools, all of which are command line utilities, 
+for transcoding various video, audio, and container formats, running on 
+a platform that supports shared libraries and threads. Decoding and 
+encoding is done by loaded modules that are responsible for feeding 
+transcode with raw video/audio streams (import modules) and encoding the 
+frames (export modules). It includes a variety of video and audio 
+filters, including (but not limited to) video de-interlacing, audio 
+resampling, framerate conversion, different video resizing algorithms, 
+smoothing, sharpening, denoisifying, and cutting.
+
+Runtime requirements:
+  cygwin-1.5.24-2
+  gtk+-1.2.10-2
+  libMagick10-6.3.0.1-2
+  libSDL12-1.2.12-1
+  libX11_6-1.1.1-1
+  libXaw8-1.0.2-1
+  libXt6-1.0.4-1
+  liba52_0-0.7.4-3
+  libavcodec51-9958-1
+  libdv4-1.0.0-1
+  libdvdread3-0.9.7-1
+  libfame09-0.9.1-1
+  libfreetype26-2.3.5-1
+  libiconv2-1.11-1
+  libjpeg62-6b-12
+  libmjpegtools18-1.8.0-1
+  libmp3lame0-3.97-1
+  libmpeg2_0-0.4.0b-1
+  libmpeg3_1-1.5.4-1
+  libogg0-1.1.2-1
+  libpostproc51-9958-1
+  libquicktime-1.0.0-1
+  libtheora0-1.0alpha7-2
+  libvorbis0-1.1.1-1
+  libvorbisfile3-1.1.1-1
+  libxml2-2.6.29-1
+  lzo-1.08-1
+  mplayer-1.0_rc1-1
+  toolame-0.2l-1
+
+Build requirements:
+(besides corresponding -devel packages)
+  cygwin-1.5.24-2
+  autoconf2.5-2.61-1
+  automake1.9-1.9.6-2
+  binutils-20060817-1
+  cygport-0.3.5-1
+  gawk-3.1.5-4
+  gcc-core-3.4.4-3
+  libtool1.5-1.5.23a-2
+  make-3.81-1
+  pkg-config-0.21-1
+  sed-4.1.5-2
+
+Canonical website:
+  http://www.transcoding.org/
+
+Canonical download:
+  http://transcode.kabewm.com/
+  http://fromani.exit1.org/
+
+-------------------------------------------
+
+Build instructions:
+  unpack transcode-1.0.3-X-src.tar.bz2
+    if you use setup to install this src package, it will be
+	 unpacked under /usr/src automatically
+  cd /usr/src
+  cygport ./transcode-1.0.3-X.cygport all
+
+This will create:
+  /usr/src/transcode-1.0.3-X-src.tar.bz2
+  /usr/src/transcode-1.0.3-X.tar.bz2
+
+-------------------------------------------
+
+Files included in the binary package:
+
+
+------------------
+
+Port Notes:
+
+----- version 1.0.3-1 -----
+Initial release for Cygwin.
+
+
+Cygwin port maintained by:
+http://cygwinports.dotsrc.org/

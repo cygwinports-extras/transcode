@@ -1,0 +1,12 @@
+category: Audio Video
+requires: cygwin gtk+ libMagick10 libSDL12 libX11_6 libXaw8 libXt6 liba52_0 libavcodec51 libdv4 libdvdread3 libfame09 libfreetype26 libiconv2 libjpeg62 libmjpegtools18 libmp3lame0 libmpeg2_0 libmpeg3_1 libogg0 libpostproc51 libquicktime libtheora0 libvorbis0 libvorbisfile3 libxml2 lzo toolame
+sdesc: "Audio/video codec transcoder"
+ldesc: "Transcode is a suite of tools, all of which are command line 
+utilities, for transcoding various video, audio, and container formats, 
+running on a platform that supports shared libraries and threads. 
+Decoding and encoding is done by loaded modules that are responsible for 
+feeding transcode with raw video/audio streams (import modules) and 
+encoding the frames (export modules). It includes a variety of video and 
+audio filters, including (but not limited to) video de-interlacing, 
+audio resampling, framerate conversion, different video resizing 
+algorithms, smoothing, sharpening, denoisifying, and cutting."
