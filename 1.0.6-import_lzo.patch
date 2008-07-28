@@ -1,0 +1,42 @@
+--- origsrc/transcode-1.0.6/import/import_lzo.c	2008-07-06 04:52:02.000000000 -0500
++++ src/transcode-1.0.6/import/import_lzo.c	2008-07-28 16:07:56.984375000 -0500
+@@ -53,6 +53,30 @@
+ 
+ static int done_seek=0;
+ 
++/* macro goodies */
++#define tc_log_error(tag, format, args...) \
++    tc_log("ERROR: ", tag, format , ## args)
++#define tc_log_info(tag, format, args...) \
++    tc_log("info: ", tag, format , ## args)
++#define tc_log_warn(tag, format, args...) \
++    tc_log("Warning: ", tag, format , ## args)
++#define tc_log_msg(tag, format, args...) \
++    tc_log(" ", tag, format , ## args)
++
++static int tc_log(const char *pre, const char *tag, const char *fmt, ...)
++{
++    va_list ap;
++
++    fprintf(stderr, "[%s] %s", tag, pre);
++    va_start(ap, fmt);
++    vfprintf(stderr, fmt, ap);
++    va_end(ap);
++    fputs("\n", stderr);
++
++    fflush(stderr);
++    return 0;
++}
++
+ /* ------------------------------------------------------------
+  *
+  * open stream
+@@ -178,7 +201,7 @@
+ 	      return (TC_IMPORT_ERROR);
+       }
+       if (h->flags & TC_LZO_NOT_COMPRESSIBLE) {
+-          ac_memcpy(param->buffer, compdata, compsize);
++          tc_memcpy(param->buffer, compdata, compsize);
+ 	      size = compsize;
+ 	      r = LZO_E_OK;
+       } else {

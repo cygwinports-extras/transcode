@@ -1,0 +1,11 @@
+--- origsrc/transcode-1.0.6/import/iodump.c	2005-07-04 02:23:01.000000000 -0500
++++ src/transcode-1.0.6/import/iodump.c	2008-07-28 13:10:34.843750000 -0500
+@@ -42,7 +42,7 @@
+ 
+ int dvd_read(int arg_title, int arg_chapter, int arg_angle);
+ 
+-#ifdef SYS_BSD
++#if defined(SYS_BSD) || defined(__CYGWIN__)
+ typedef	off_t off64_t;
+ #define	lseek64 lseek
+ #endif

@@ -1,0 +1,13 @@
+--- origsrc/transcode-1.0.6/configure.in	2008-07-26 03:05:53.000000000 -0500
++++ src/transcode-1.0.6/configure.in	2008-07-28 13:10:34.578125000 -0500
+@@ -1246,8 +1256,8 @@
+ dnl
+ IMAGEMAGICK_EXTRA_LIBS="$IMAGEMAGICK_EXTRA_LIBS -lz -lm"
+ dnl MagickWand libraries/headers always (?) are a superset of MagickCore ones.
+-TC_PKG_CHECK(imagemagick, no, IMAGEMAGICK, Wand-config, [magick/api.h],
+- Magick, InitializeMagick, Wand, [http://www.imagemagick.org/])
++TC_PKG_CHECK(imagemagick, no, IMAGEMAGICK, MagickWand-config, [magick/api.h],
++ MagickCore, InitializeMagick, MagickWand, [http://www.imagemagick.org/])
+ TC_PKG_HAVE(imagemagick, IMAGEMAGICK)
+ if test x"$have_imagemagick" = x"yes" ; then
+   AC_CHECK_HEADER([wand/magick-wand.h],

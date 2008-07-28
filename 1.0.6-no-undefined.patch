@@ -1,0 +1,935 @@
+--- origsrc/transcode-1.0.6/Makefile.am	2005-07-25 03:22:46.000000000 -0500
++++ src/transcode-1.0.6/Makefile.am	2008-07-28 13:10:34.562500000 -0500
+@@ -18,10 +18,10 @@
+ 	avilib \
+ 	libac3 \
+ 	libvo \
++	src \
+ 	import \
+ 	export \
+ 	filter \
+-	src \
+ 	tools \
+ 	$(PVM3) \
+ 	testsuite
+--- origsrc/transcode-1.0.6/configure.in	2008-07-26 03:05:53.000000000 -0500
++++ src/transcode-1.0.6/configure.in	2008-07-28 13:10:34.578125000 -0500
+@@ -46,6 +46,7 @@
+     CXXFLAGS="${CXXFLAGS} -no-cpp-precomp -D_INTL_REDIRECT_MACROS"
+     OBJCFLAGS="${OBJCFLAGS} -no-cpp-precomp -D_INTL_REDIRECT_MACROS"
+     #LDFLAGS="${LDFLAGS} -all_load"
++    PLUGIN_LDFLAGS="-avoid-version -shrext .so"
+ 
+     AC_DEFINE([SYSTEM_DARWIN], 1, [Define if this is Darwin / MacOSX OS])
+     AC_DEFINE([BROKEN_PTHREADS], 1, [Define if you have weird pthreads])
+@@ -56,10 +57,19 @@
+       LDFLAGS="${LDFLAGS} -L/sw/lib"
+     fi
+     ;;
++  xcygwin*)
++    is_win32=true
++    PLUGIN_LDFLAGS="-avoid-version -no-undefined -shrext .so -Wl,\$(top_builddir)/src/libtranscode.a"
++    ;;
++  x*)
++    PLUGIN_LDFLAGS="-avoid-version -shrext .so"
++    ;;
+ esac
+ 
+ 
+ AM_CONDITIONAL([SYSTEM_DARWIN], test x"$is_osx" = x"true")
++AM_CONDITIONAL([SYSTEM_WIN32], test x"$is_win32" = x"true")
++AC_SUBST(PLUGIN_LDFLAGS)
+ 
+ # Checks for libraries.
+ AC_CHECK_LIB(dl, dlopen)
+--- origsrc/transcode-1.0.6/export/Makefile.am	2008-07-06 11:37:44.000000000 -0500
++++ src/transcode-1.0.6/export/Makefile.am	2008-07-28 13:10:34.593750000 -0500
+@@ -102,146 +102,146 @@
+ 	$(MODS_PVM3)
+ 
+ export_ac3_la_SOURCES = export_ac3.c
+-export_ac3_la_LDFLAGS = -module -avoid-version
++export_ac3_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ export_debugppm_la_SOURCES = export_debugppm.c aud_aux.c
+-export_debugppm_la_LDFLAGS = -module -avoid-version
++export_debugppm_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_debugppm_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS) $(LIBVO_LIBS)
+ 
+ export_divx4_la_SOURCES = export_divx4.c aud_aux.c divx4_vbr.c
+-export_divx4_la_LDFLAGS = -module -avoid-version
++export_divx4_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_divx4_la_LIBADD = $(LAME_LIBS) $(LIBAVCODEC_LIBS) $(AC3_LIBS)
+ 
+ export_divx4raw_la_SOURCES = export_divx4raw.c aud_aux.c divx4_vbr.c ../import/ioaux.c
+-export_divx4raw_la_LDFLAGS = -module -avoid-version
++export_divx4raw_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_divx4raw_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ export_divx5_la_SOURCES = export_divx5.c aud_aux.c divx4_vbr.c
+-export_divx5_la_LDFLAGS = -module -avoid-version
++export_divx5_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_divx5_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ export_divx5raw_la_SOURCES = export_divx5raw.c aud_aux.c divx4_vbr.c ../import/ioaux.c
+-export_divx5raw_la_LDFLAGS = -module -avoid-version
++export_divx5raw_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_divx5raw_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ export_ffmpeg_la_SOURCES = export_ffmpeg.c aud_aux.c ffmpeg_cfg.c vid_aux.c
+-export_ffmpeg_la_LDFLAGS = -module -avoid-version
++export_ffmpeg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_ffmpeg_la_LIBADD = $(LAME_LIBS) $(LIBVO_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ export_lame_la_SOURCES = export_lame.c
+-export_lame_la_LDFLAGS = -module -avoid-version
++export_lame_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ export_mp1e_la_SOURCES = export_mp1e.c vid_aux.c
+-export_mp1e_la_LDFLAGS = -module -avoid-version
++export_mp1e_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_mp1e_la_LIBADD  = $(LIBVO_LIBS) -lm
+ 
+ export_mp2_la_SOURCES = export_mp2.c
+-export_mp2_la_LDFLAGS = -module -avoid-version
++export_mp2_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ export_null_la_SOURCES = export_null.c
+-export_null_la_LDFLAGS = -module -avoid-version
++export_null_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ export_ogg_la_SOURCES = export_ogg.c
+-export_ogg_la_LDFLAGS = -module -avoid-version
++export_ogg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ export_pcm_la_SOURCES = export_pcm.c ../import/ioaux.c
+-export_pcm_la_LDFLAGS = -module -avoid-version
++export_pcm_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_pcm_la_LIBADD = -lm
+ 
+ export_ppm_la_SOURCES = export_ppm.c aud_aux.c
+-export_ppm_la_LDFLAGS = -module -avoid-version
++export_ppm_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_ppm_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS) $(LIBVO_LIBS)
+ 
+ export_pvn_la_SOURCES = export_pvn.c aud_aux.c
+-export_pvn_la_LDFLAGS = -module -avoid-version
++export_pvn_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_pvn_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBVO_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ export_raw_la_SOURCES = export_raw.c aud_aux.c
+-export_raw_la_LDFLAGS = -module -avoid-version
++export_raw_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_raw_la_LIBADD = $(LAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ export_toolame_la_SOURCES = export_toolame.c
+-export_toolame_la_LDFLAGS = -module -avoid-version
++export_toolame_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ export_wav_la_SOURCES = export_wav.c
+-export_wav_la_LDFLAGS = -module -avoid-version
++export_wav_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_wav_la_LIBADD = -lm
+ 
+ export_xvid2_la_SOURCES = export_xvid2.c aud_aux.c xvid_vbr.c ../import/ioaux.c
+-export_xvid2_la_LDFLAGS = -module -avoid-version
++export_xvid2_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_xvid2_la_LIBADD = $(LIBAVCODEC_LIBS) $(LAME_LIBS) $(AC3_LIBS)
+ 
+ export_xvid3_la_SOURCES = export_xvid3.c aud_aux.c xvid_vbr.c ../import/ioaux.c
+-export_xvid3_la_LDFLAGS = -module -avoid-version
++export_xvid3_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_xvid3_la_LIBADD = $(LIBAVCODEC_LIBS) $(LAME_LIBS) $(AC3_LIBS)
+ 
+ export_xvid4_la_SOURCES = export_xvid4.c aud_aux.c ../import/ioaux.c
+-export_xvid4_la_LDFLAGS = -module -avoid-version
++export_xvid4_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_xvid4_la_LIBADD = $(LIBAVCODEC_LIBS) $(LAME_LIBS) $(AC3_LIBS)
+ 
+ # MODS_AVIFILE
+ export_af6_la_SOURCES = export_af6.cpp af6_aux.cpp aud_aux.c
+-export_af6_la_LDFLAGS = -module -avoid-version
++export_af6_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_af6_la_LIBADD = $(LAME_LIBS) $(AVIFILE_LIBS) -lstdc++ $(AC3_LIBS) -lm
+ 
+ # MODS_IMAGEMAGICK
+ export_im_la_SOURCES = export_im.c vid_aux.c
+-export_im_la_LDFLAGS = -module -avoid-version
++export_im_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_im_la_LIBADD = $(IMAGEMAGICK_LIBS) $(LIBVO_LIBS) -lm
+ 
+ # MODS_LIBDV
+ export_dv_la_SOURCES = export_dv.c aud_aux.c vid_aux.c
+-export_dv_la_LDFLAGS = -module -avoid-version 
++export_dv_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ export_dv_la_LIBADD = $(LAME_LIBS) $(LIBDV_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS) $(LIBVO_LIBS)
+ 
+ export_dvraw_la_SOURCES = export_dvraw.c vid_aux.c ../import/ioaux.c
+-export_dvraw_la_LDFLAGS = -module -avoid-version
++export_dvraw_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_dvraw_la_LIBADD = $(LIBDV_LIBS) $(LIBVO_LIBS) -lm
+ 
+ # MODS_LIBFAME
+ export_fame_la_SOURCES = export_fame.c aud_aux.c
+-export_fame_la_LDFLAGS = -module -avoid-version
++export_fame_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_fame_la_LIBADD = $(LAME_LIBS) $(LIBFAME_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ # MODS_LIBJPEG
+ export_jpg_la_SOURCES = export_jpg.c
+-export_jpg_la_LDFLAGS = -module -avoid-version
++export_jpg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_jpg_la_LIBADD = $(LIBJPEG_LIBS) -lm
+ 
+ export_mjpeg_la_SOURCES = export_mjpeg.c vid_aux.c aud_aux.c
+-export_mjpeg_la_LDFLAGS = -module -avoid-version
++export_mjpeg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_mjpeg_la_LIBADD = $(LIBJPEG_LIBS) $(LAME_LIBS) $(LIBVO_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ # MODS_LIBQUICKTIME
+ export_mov_la_SOURCES = export_mov.c vid_aux.c
+-export_mov_la_LDFLAGS = -module -avoid-version
++export_mov_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_mov_la_LIBADD = $(LIBQUICKTIME_LIBS) $(LIBVO_LIBS) -lm
+ 
+ # MODS_LZO
+ export_lzo_la_SOURCES = export_lzo.c aud_aux.c
+-export_lzo_la_LDFLAGS = -module -avoid-version
++export_lzo_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_lzo_la_LIBADD = $(LAME_LIBS) $(LZO_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ # MODS_MJPEGTOOLS
+ export_mp2enc_la_SOURCES = export_mp2enc.c
+-export_mp2enc_la_LDFLAGS = -module -avoid-version
++export_mp2enc_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_mp2enc_la_LIBADD = -lm
+ 
+ export_mpeg2enc_la_SOURCES = export_mpeg2enc.c vid_aux.c
+-export_mpeg2enc_la_LDFLAGS = -module -avoid-version
++export_mpeg2enc_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_mpeg2enc_la_LIBADD = $(MJPEGTOOLS_LIBS) $(LIBVO_LIBS) -lm
+ 
+ export_yuv4mpeg_la_SOURCES = export_yuv4mpeg.c aud_aux.c vid_aux.c ../import/ioaux.c
+-export_yuv4mpeg_la_LDFLAGS = -module -avoid-version
++export_yuv4mpeg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ export_yuv4mpeg_la_LIBADD = $(LAME_LIBS) $(MJPEGTOOLS_LIBS) $(LIBVO_LIBS) $(AC3_LIBS) $(LIBAVCODEC_LIBS)
+ 
+ # MODS_NET_STREAM
+ export_net_la_SOURCES = export_net.c ../import/ioaux.c
+-export_net_la_LDFLAGS = -module -avoid-version
++export_net_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ # MODS_PVM3
+ export_pvm_la_SOURCES = export_pvm.c ../pvm3/pvm_interface.c ../pvm3/pvm_parser.c ../pvm3/external_codec.c ../pvm3/vob_pack_unpack.c
+-export_pvm_la_LDFLAGS = -module -avoid-version
++export_pvm_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ pkg_DATA = export_af6.conf xvid2.cfg xvid3.cfg xvid4.cfg
+ 
+--- origsrc/transcode-1.0.6/filter/Makefile.am	2007-06-28 16:46:47.000000000 -0500
++++ src/transcode-1.0.6/filter/Makefile.am	2008-07-28 13:10:34.609375000 -0500
+@@ -105,185 +105,185 @@
+ 	$(F_TEXT)
+ 
+ filter_29to23_la_SOURCES = filter_29to23.c
+-filter_29to23_la_LDFLAGS = -module -avoid-version 
++filter_29to23_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_32detect_la_SOURCES = filter_32detect.c
+-filter_32detect_la_LDFLAGS = -module -avoid-version 
++filter_32detect_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_32drop_la_SOURCES = filter_32drop.c
+-filter_32drop_la_LDFLAGS = -module -avoid-version 
++filter_32drop_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_aclip_la_SOURCES = filter_aclip.c
+-filter_aclip_la_LDFLAGS = -module -avoid-version 
++filter_aclip_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_ascii_la_SOURCES = filter_ascii.c ../export/vid_aux.c
+-filter_ascii_la_LDFLAGS = -module -avoid-version 
++filter_ascii_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_ascii_la_LIBADD = $(LIBVO_LIBS)
+ 
+ filter_astat_la_SOURCES = filter_astat.c
+-filter_astat_la_LDFLAGS = -module -avoid-version 
++filter_astat_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_clone_la_SOURCES = filter_clone.c
+-filter_clone_la_LDFLAGS = -module -avoid-version 
++filter_clone_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_control_la_SOURCES = filter_control.c
+-filter_control_la_LDFLAGS = -module -avoid-version
++filter_control_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_cpaudio_la_SOURCES = filter_cpaudio.c
+-filter_cpaudio_la_LDFLAGS = -module -avoid-version 
++filter_cpaudio_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_cshift_la_SOURCES = filter_cshift.c
+-filter_cshift_la_LDFLAGS = -module -avoid-version 
++filter_cshift_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_cut_la_SOURCES = filter_cut.c
+-filter_cut_la_LDFLAGS = -module -avoid-version 
++filter_cut_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_decimate_la_SOURCES = filter_decimate.c
+-filter_decimate_la_LDFLAGS = -module -avoid-version
++filter_decimate_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_denoise3d_la_SOURCES = filter_denoise3d.c
+-filter_denoise3d_la_LDFLAGS = -module -avoid-version 
++filter_denoise3d_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_detectclipping_la_SOURCES = filter_detectclipping.c
+-filter_detectclipping_la_LDFLAGS = -module -avoid-version 
++filter_detectclipping_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_detectsilence_la_SOURCES = filter_detectsilence.c
+-filter_detectsilence_la_LDFLAGS = -module -avoid-version 
++filter_detectsilence_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_dnr_la_SOURCES = filter_dnr.c
+-filter_dnr_la_LDFLAGS = -module -avoid-version 
++filter_dnr_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_dnr_la_LIBADD = -lm
+ 
+ filter_doublefps_la_SOURCES = filter_doublefps.c
+-filter_doublefps_la_LDFLAGS = -module -avoid-version 
++filter_doublefps_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_facemask_la_SOURCES = filter_facemask.c ../export/vid_aux.c
+-filter_facemask_la_LDFLAGS = -module -avoid-version 
++filter_facemask_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_facemask_la_LIBADD = $(LIBVO_LIBS)
+ 
+ filter_fieldanalysis_la_SOURCES = filter_fieldanalysis.c
+-filter_fieldanalysis_la_LDFLAGS = -module -avoid-version 
++filter_fieldanalysis_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_fields_la_SOURCES = filter_fields.c
+-filter_fields_la_LDFLAGS = -module -avoid-version 
++filter_fields_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_fps_la_SOURCES = filter_fps.c
+-filter_fps_la_LDFLAGS = -module -avoid-version
++filter_fps_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_hqdn3d_la_SOURCES = filter_hqdn3d.c
+-filter_hqdn3d_la_LDFLAGS = -module -avoid-version 
++filter_hqdn3d_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_ivtc_la_SOURCES = filter_ivtc.c
+-filter_ivtc_la_LDFLAGS = -module -avoid-version
++filter_ivtc_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_invert_la_SOURCES = filter_invert.c
+-filter_invert_la_LDFLAGS = -module -avoid-version 
++filter_invert_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_levels_la_SOURCES = filter_levels.c
+-filter_levels_la_LDFLAGS = -module -avoid-version
++filter_levels_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_lowpass_la_SOURCES = filter_lowpass.c
+-filter_lowpass_la_LDFLAGS = -module -avoid-version 
++filter_lowpass_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_mask_la_SOURCES = filter_mask.c
+-filter_mask_la_LDFLAGS = -module -avoid-version 
++filter_mask_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_modfps_la_SOURCES = filter_modfps.c
+-filter_modfps_la_LDFLAGS = -module -avoid-version 
++filter_modfps_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_modfps_la_LIBADD = -lm
+ 
+ filter_msharpen_la_SOURCES = filter_msharpen.c ../export/vid_aux.c
+-filter_msharpen_la_LDFLAGS = -module -avoid-version
++filter_msharpen_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_msharpen_la_LIBADD = $(LIBVO_LIBS)
+ 
+ filter_nored_la_SOURCES = filter_nored.c
+-filter_nored_la_LDFLAGS = -module -avoid-version 
++filter_nored_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_normalize_la_SOURCES = filter_normalize.c
+-filter_normalize_la_LDFLAGS = -module -avoid-version 
++filter_normalize_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_normalize_la_LIBADD = -lm
+ 
+ filter_null_la_SOURCES = filter_null.c
+-filter_null_la_LDFLAGS = -module -avoid-version 
++filter_null_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_skip_la_SOURCES = filter_skip.c
+-filter_skip_la_LDFLAGS = -module -avoid-version 
++filter_skip_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_resample_la_SOURCES = filter_resample.c
+-filter_resample_la_LDFLAGS = -module -avoid-version
++filter_resample_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_resample_la_LIBADD = $(LIBAVCODEC_LIBS)
+ 
+ filter_slowmo_la_SOURCES = filter_slowmo.c
+-filter_slowmo_la_LDFLAGS = -module -avoid-version 
++filter_slowmo_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_smartbob_la_SOURCES = filter_smartbob.c ../export/vid_aux.c
+-filter_smartbob_la_LDFLAGS = -module -avoid-version 
++filter_smartbob_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_smartbob_la_LIBADD = $(LIBVO_LIBS)
+ 
+ filter_smartdeinter_la_SOURCES = filter_smartdeinter.c ../export/vid_aux.c
+-filter_smartdeinter_la_LDFLAGS = -module -avoid-version 
++filter_smartdeinter_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_smartdeinter_la_LIBADD = $(LIBVO_LIBS)
+ 
+ filter_smartyuv_la_SOURCES = filter_smartyuv.c
+-filter_smartyuv_la_LDFLAGS = -module -avoid-version 
++filter_smartyuv_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_smooth_la_SOURCES = filter_smooth.c
+-filter_smooth_la_LDFLAGS = -module -avoid-version 
++filter_smooth_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_tc_audio_la_SOURCES = filter_tc_audio.c
+-filter_tc_audio_la_LDFLAGS = -module -avoid-version 
++filter_tc_audio_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_tc_video_la_SOURCES = filter_tc_video.c
+-filter_tc_video_la_LDFLAGS = -module -avoid-version 
++filter_tc_video_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_test_la_SOURCES = filter_test.c
+-filter_test_la_LDFLAGS = -module -avoid-version
++filter_test_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_testframe_la_SOURCES = filter_testframe.c
+-filter_testframe_la_LDFLAGS = -module -avoid-version 
++filter_testframe_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_unsharp_la_SOURCES = filter_unsharp.c
+-filter_unsharp_la_LDFLAGS = -module -avoid-version 
++filter_unsharp_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_videocore_la_SOURCES = filter_videocore.c
+-filter_videocore_la_LDFLAGS = -module -avoid-version 
++filter_videocore_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ filter_whitebalance_la_SOURCES = filter_whitebalance.c ../export/vid_aux.c
+-filter_whitebalance_la_LDFLAGS = -module -avoid-version
++filter_whitebalance_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_whitebalance_la_LIBADD = $(LIBVO_LIBS) -lm
+ 
+ filter_xsharpen_la_SOURCES = filter_xsharpen.c
+-filter_xsharpen_la_LDFLAGS = -module -avoid-version
++filter_xsharpen_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_yuy2toyv12_la_SOURCES = filter_yuy2toyv12.c
+-filter_yuy2toyv12_la_LDFLAGS = -module -avoid-version 
++filter_yuy2toyv12_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ 
+ # F_LOGO = filter_logo.la filter_logoaway.la filter_compare.la
+ 
+ filter_logo_la_SOURCES = filter_logo.c ../export/vid_aux.c
+-filter_logo_la_LDFLAGS = -module -avoid-version
++filter_logo_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_logo_la_LIBADD = $(IMAGEMAGICK_LIBS) $(LIBVO_LIBS)
+ 
+ filter_logoaway_la_SOURCES = filter_logoaway.c
+-filter_logoaway_la_LDFLAGS = -module -avoid-version 
++filter_logoaway_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_logoaway_la_LIBADD = $(IMAGEMAGICK_LIBS)
+ 
+ filter_compare_la_SOURCES = filter_compare.c ../export/vid_aux.c
+-filter_compare_la_LDFLAGS = -module -avoid-version
++filter_compare_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_compare_la_LIBADD = $(IMAGEMAGICK_LIBS) $(LIBVO_LIBS)
+ 
+ 
+ # F_MMX = filter_dilyuvmmx.la 
+ 
+ filter_dilyuvmmx_la_SOURCES = filter_dilyuvmmx.c deinterlace.c
+-filter_dilyuvmmx_la_LDFLAGS = -module -avoid-version 
++filter_dilyuvmmx_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ 
+ # F_TEXT = filter_text.la
+ 
+ filter_text_la_SOURCES = filter_text.c
+-filter_text_la_LDFLAGS = -module -avoid-version 
++filter_text_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ filter_text_la_LIBADD  = $(FREETYPE2_LIBS)
+ 
+ 
+--- origsrc/transcode-1.0.6/filter/divxkey/Makefile.am	2004-12-15 22:22:06.000000000 -0600
++++ src/transcode-1.0.6/filter/divxkey/Makefile.am	2008-07-28 13:10:34.625000000 -0500
+@@ -16,6 +16,6 @@
+ pkg_LTLIBRARIES = filter_divxkey.la
+ 
+ filter_divxkey_la_SOURCES = filter_divxkey.c bitstream.c
+-filter_divxkey_la_LDFLAGS = -module -avoid-version
++filter_divxkey_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ EXTRA_DIST = bitstream.h
+--- origsrc/transcode-1.0.6/filter/extsub/Makefile.am	2004-12-15 22:22:06.000000000 -0600
++++ src/transcode-1.0.6/filter/extsub/Makefile.am	2008-07-28 13:10:34.671875000 -0500
+@@ -11,9 +11,9 @@
+ pkg_LTLIBRARIES = filter_extsub.la filter_extsub2.la
+ 
+ filter_extsub_la_SOURCES = filter_extsub.c subproc.c subtitle_buffer.c
+-filter_extsub_la_LDFLAGS = -module -avoid-version
++filter_extsub_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_extsub2_la_SOURCES = filter_extsub.c subproc.c subtitle_buffer.c
+-filter_extsub2_la_LDFLAGS = -module -avoid-version
++filter_extsub2_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ EXTRA_DIST = subproc.h subtitle_buffer.h
+--- origsrc/transcode-1.0.6/filter/pp/Makefile.am	2005-04-14 22:55:29.000000000 -0500
++++ src/transcode-1.0.6/filter/pp/Makefile.am	2008-07-28 13:10:34.687500000 -0500
+@@ -14,4 +14,4 @@
+ 
+ filter_pp_la_SOURCES = filter_pp.c
+ filter_pp_la_LIBADD = $(LIBPOSTPROC_LIBS)
+-filter_pp_la_LDFLAGS = -module -avoid-version
++filter_pp_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+--- origsrc/transcode-1.0.6/filter/preview/Makefile.am	2008-04-12 04:34:02.000000000 -0500
++++ src/transcode-1.0.6/filter/preview/Makefile.am	2008-07-28 13:10:34.703125000 -0500
+@@ -36,7 +36,7 @@
+ pkg_LTLIBRARIES = $(MOD_PREVIEW) $(MOD_PV)
+ 
+ filter_preview_la_SOURCES = filter_preview.c display.c
+-filter_preview_la_LDFLAGS = -module -avoid-version
++filter_preview_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_preview_la_LIBADD = \
+ 	$(X_LIBS) \
+ 	$(X_PRE_LIBS) \
+@@ -46,7 +46,7 @@
+ 	$(LIBDV_LIBS)
+ 
+ filter_pv_la_SOURCES = filter_pv.c pv.c
+-filter_pv_la_LDFLAGS = -module -avoid-version
++filter_pv_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_pv_la_LIBADD = \
+ 	$(X_LIBS) \
+ 	$(X_PRE_LIBS) \
+--- origsrc/transcode-1.0.6/filter/subtitler/Makefile.am	2005-03-12 20:33:02.000000000 -0600
++++ src/transcode-1.0.6/filter/subtitler/Makefile.am	2008-07-28 13:10:34.718750000 -0500
+@@ -26,7 +26,7 @@
+ 	external_programs.c \
+ 	color_processor.c
+ 
+-filter_subtitler_la_LDFLAGS = -module -avoid-version
++filter_subtitler_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ filter_subtitler_la_LIBADD = \
+ 	$(X_LIBS) \
+--- origsrc/transcode-1.0.6/filter/tomsmocomp/Makefile.am	2007-06-28 16:46:47.000000000 -0500
++++ src/transcode-1.0.6/filter/tomsmocomp/Makefile.am	2008-07-28 13:10:34.765625000 -0500
+@@ -33,7 +33,7 @@
+ 	tomsmocompfilter_3dnow.c \
+ 	tomsmocompfilter_sse.c
+ 
+-filter_tomsmocomp_la_LDFLAGS = -module -avoid-version
++filter_tomsmocomp_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ EXTRA_DIST = \
+ 	Readme_TomsMoComp.txt \
+--- origsrc/transcode-1.0.6/filter/yuvdenoise/Makefile.am	2004-12-15 22:22:06.000000000 -0600
++++ src/transcode-1.0.6/filter/yuvdenoise/Makefile.am	2008-07-28 13:10:34.765625000 -0500
+@@ -18,11 +18,11 @@
+ 	deinterlace.c \
+ 	denoise.c \
+ 	motion.c
+-filter_yuvdenoise_la_LDFLAGS = -module -avoid-version
++filter_yuvdenoise_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ filter_yuvdenoise_la_LIBADD = $(LIBVO_LIBS)
+ 
+ filter_yuvmedian_la_SOURCES = filter_yuvmedian.c
+-filter_yuvmedian_la_LDFLAGS = -module -avoid-version
++filter_yuvmedian_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ EXTRA_DIST = \
+ 	deinterlace.h \
+--- origsrc/transcode-1.0.6/import/Makefile.am	2005-06-08 01:54:46.000000000 -0500
++++ src/transcode-1.0.6/import/Makefile.am	2008-07-28 13:10:34.781250000 -0500
+@@ -129,135 +129,135 @@
+ 	import_yuv.la
+ 
+ import_null_la_SOURCES = import_null.c
+-import_null_la_LDFLAGS = -module -avoid-version 
++import_null_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_sh_la_SOURCES = import_sh.c
+-import_sh_la_LDFLAGS = -module -avoid-version 
++import_sh_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_ogg_la_SOURCES = import_ogg.c
+-import_ogg_la_LDFLAGS = -module -avoid-version 
++import_ogg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+-import_xml_la_SOURCES = import_xml.c ioxml.c probe_xml.c ../src/zoom.c
+-import_xml_la_LDFLAGS = -module -avoid-version 
++import_xml_la_SOURCES = import_xml.c ioxml.c probe_xml.c ioaux.c ../src/zoom.c
++import_xml_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_xml_la_LIBADD = $(LIBXML2_LIBS) -lm
+ 
+ import_yuv4mpeg_la_SOURCES = import_yuv4mpeg.c
+-import_yuv4mpeg_la_LDFLAGS = -module -avoid-version 
++import_yuv4mpeg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_mplayer_la_SOURCES = import_mplayer.c
+-import_mplayer_la_LDFLAGS = -module -avoid-version 
++import_mplayer_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_rawlist_la_SOURCES = import_rawlist.c ioaux.c
+-import_rawlist_la_LDFLAGS = -module -avoid-version
++import_rawlist_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ import_rawlist_la_LIBADD = -lm
+ 
+ import_divx_la_SOURCES = import_divx.c
+-import_divx_la_LDFLAGS = -module -avoid-version 
++import_divx_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_xvid_la_SOURCES = import_xvid.c
+-import_xvid_la_LDFLAGS = -module -avoid-version 
++import_xvid_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_ffmpeg_la_SOURCES = import_ffmpeg.c 
+-import_ffmpeg_la_LDFLAGS = -module -avoid-version 
++import_ffmpeg_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_ffmpeg_la_LIBADD = $(LIBAVCODEC_LIBS)
+ 
+ import_im_la_SOURCES = import_im.c
+-import_im_la_LDFLAGS = -module -avoid-version 
++import_im_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_im_la_LIBADD = $(IMAGEMAGICK_LIBS) -lm 
+ 
+ import_imlist_la_SOURCES = import_imlist.c
+-import_imlist_la_LDFLAGS = -module -avoid-version 
++import_imlist_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_imlist_la_LIBADD = $(IMAGEMAGICK_LIBS) -lm 
+ 
+ import_mov_la_SOURCES = import_mov.c
+-import_mov_la_LDFLAGS = -module -avoid-version 
++import_mov_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_mov_la_LIBADD = $(LIBQUICKTIME_LIBS) -lm 
+ 
+ import_lav_la_SOURCES = import_lav.c
+-import_lav_la_LDFLAGS = -module -avoid-version 
++import_lav_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_raw_la_SOURCES = import_raw.c
+-import_raw_la_LDFLAGS = -module -avoid-version 
++import_raw_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_nvrec_la_SOURCES = import_nvrec.c
+-import_nvrec_la_LDFLAGS = -module -avoid-version 
++import_nvrec_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_mpeg2_la_SOURCES = import_mpeg2.c
+-import_mpeg2_la_LDFLAGS = -module -avoid-version 
++import_mpeg2_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_mpeg3_la_SOURCES = import_mpeg3.c
+-import_mpeg3_la_LDFLAGS = -module -avoid-version 
++import_mpeg3_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_mpeg3_la_LIBADD = $(LIBMPEG3_LIBS)
+ 
+ import_fraps_la_SOURCES = import_fraps.c 
+-import_fraps_la_LDFLAGS = -module -avoid-version 
++import_fraps_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_avi_la_SOURCES = import_avi.c 
+-import_avi_la_LDFLAGS = -module -avoid-version 
++import_avi_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_ac3_la_SOURCES = import_ac3.c ioaux.c ac3scan.c
+-import_ac3_la_LDFLAGS = -module -avoid-version 
++import_ac3_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_ac3_la_LIBADD = $(AC3_LIBS) -lm
+ 
+ import_vdrac3_la_SOURCES = import_vdrac3.c ioaux.c ac3scan.c
+-import_vdrac3_la_LDFLAGS = -module -avoid-version 
++import_vdrac3_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_vdrac3_la_LIBADD = $(AC3_LIBS) -lm
+ 
+ a52_decore_la_SOURCES = a52_decore.c ioaux.c
+-a52_decore_la_LDFLAGS = -module -avoid-version 
++a52_decore_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ a52_decore_la_LIBADD = $(A52_LIBS) $(XIO_LIBS)
+ 
+ af6_decore_la_SOURCES = af6_decore.cpp ioaux.c
+-af6_decore_la_LDFLAGS = -module -avoid-version 
++af6_decore_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ af6_decore_la_LIBADD = $(AVIFILE_LIBS) -lstdc++ -lm
+ 
+ import_mp3_la_SOURCES = import_mp3.c ioaux.c
+-import_mp3_la_LDFLAGS = -module -avoid-version 
++import_mp3_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_lzo_la_SOURCES = import_lzo.c 
+-import_lzo_la_LDFLAGS = -module -avoid-version 
++import_lzo_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ import_lzo_la_LIBADD  = $(LZO_LIBS) -lm
+ 
+ import_vob_la_SOURCES = import_vob.c ac3scan.c clone.c ioaux.c frame_info.c ivtc.c
+-import_vob_la_LDFLAGS =	-module -avoid-version
++import_vob_la_LDFLAGS =	-module $(PLUGIN_LDFLAGS)
+ import_vob_la_LIBADD = $(AC3_LIBS)
+ 
+ import_dvd_la_SOURCES = import_dvd.c ac3scan.c dvd_reader.c clone.c ioaux.c frame_info.c ivtc.c
+-import_dvd_la_LDFLAGS = -module -avoid-version
++import_dvd_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ import_dvd_la_LIBADD = $(LIBDVDREAD_LIBS) $(AC3_LIBS)
+ 
+ import_dv_la_SOURCES = import_dv.c
+-import_dv_la_LDFLAGS = -module -avoid-version
++import_dv_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ import_vnc_la_SOURCES = import_vnc.c ioaux.c
+-import_vnc_la_LDFLAGS = -module -avoid-version
++import_vnc_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ import_pvn_la_SOURCES = import_pvn.c pvn.c pvnglobals.c
+-import_pvn_la_LDFLAGS = -module -avoid-version
++import_pvn_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ import_ffbin_la_SOURCES = import_ffbin.c 
+-import_ffbin_la_LDFLAGS = -module -avoid-version 
++import_ffbin_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_bktr_la_SOURCES = import_bktr.c 
+-import_bktr_la_LDFLAGS = -module -avoid-version 
++import_bktr_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_sunau_la_SOURCES = import_sunau.c 
+-import_sunau_la_LDFLAGS = -module -avoid-version 
++import_sunau_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_oss_la_SOURCES = import_oss.c 
+-import_oss_la_LDFLAGS = -module -avoid-version 
++import_oss_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_bsdav_la_SOURCES = import_bsdav.c 
+-import_bsdav_la_LDFLAGS = -module -avoid-version 
++import_bsdav_la_LDFLAGS = -module $(PLUGIN_LDFLAGS) 
+ 
+ import_af6_la_SOURCES = import_af6.c
+-import_af6_la_LDFLAGS = -module -avoid-version
++import_af6_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ import_net_la_SOURCES = import_net.c ioaux.c
+-import_net_la_LDFLAGS = -module -avoid-version
++import_net_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ import_yuv_la_SOURCES = import_yuv.c
+-import_yuv_la_LDFLAGS = -module -avoid-version
++import_yuv_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ 
+ EXTRA_DIST = \
+--- origsrc/transcode-1.0.6/import/fileinfo.c	2007-01-21 04:20:44.000000000 -0600
++++ src/transcode-1.0.6/import/fileinfo.c	2008-07-28 13:10:34.828125000 -0500
+@@ -815,68 +815,6 @@
+   return(id);
+ }
+ 
+-char *filetype(long magic)
+-{
+-  
+-  switch(magic) {
+-    
+-  case TC_MAGIC_VOB:          return("MPEG program stream (PS)");
+-  case TC_MAGIC_M2V:          return("MPEG elementary stream (ES)");
+-  case TC_MAGIC_TS:           return("MPEG transport stream (TS)");
+-  case TC_MAGIC_MPEG:         return("MPEG packetized elementary stream (PES)");
+-  case TC_MAGIC_AVI:          return("RIFF data, AVI video");
+-  case TC_MAGIC_WAV:          return("RIFF data, WAVE audio");
+-  case TC_MAGIC_CDXA:         return("RIFF data, CDXA");
+-  case TC_MAGIC_MOV:          return("Apple QuickTime movie file");
+-  case TC_MAGIC_ASF:          return("advanced streaming format ASF");
+-  case TC_MAGIC_TIFF1:
+-  case TC_MAGIC_TIFF2:        return("TIFF image");
+-  case TC_MAGIC_JPEG:         return("JPEG image");
+-  case TC_MAGIC_BMP:          return("BMP image");
+-  case TC_MAGIC_PNG:          return("PNG image");
+-  case TC_MAGIC_GIF:          return("GIF image");
+-  case TC_MAGIC_PPM:          return("PPM image");
+-  case TC_MAGIC_PGM:          return("PGM image");
+-  case TC_MAGIC_PVN:          return("PVN video");
+-  case TC_MAGIC_SGI:          return("SGI image");
+-  case TC_MAGIC_RMF:          return("Real Media");
+-  case TC_MAGIC_XML:          return("XML file, need to analyze the content");
+-  case TC_MAGIC_LAV:          return("LAV Edit List");
+-  case TC_MAGIC_MXF:          return("The Material eXchange Format");
+-  case TC_MAGIC_OGG:          return("OGG Multimedia Container");
+-
+-  case TC_MAGIC_RAW:          return("RAW stream");
+-  case TC_MAGIC_AC3:          return("AC3 stream");
+-  case TC_MAGIC_DTS:          return("DTS stream");
+-  case TC_MAGIC_MP3:          return("MPEG-1 layer-3 stream");
+-  case TC_MAGIC_MP3_2:        return("MPEG-2 layer-3 stream");
+-  case TC_MAGIC_MP3_2_5:      return("MPEG-2.5 layer-3 stream");
+-  case TC_MAGIC_MP2:          return("MP2 stream");
+-  case TC_MAGIC_ID3:          return("MPEG audio ID3 tag");
+-
+-  case TC_MAGIC_DV_NTSC:      return("Digital Video (NTSC)");
+-  case TC_MAGIC_DV_PAL:       return("Digital Video (PAL)");
+-  case TC_MAGIC_DVD:          return("DVD image/device");
+-  case TC_MAGIC_DVD_PAL:      return("PAL DVD image/device");
+-  case TC_MAGIC_DVD_NTSC:     return("NTSC DVD image/device");
+-  case TC_MAGIC_YUV4MPEG:     return("YUV4MPEG stream");
+-  case TC_MAGIC_NUV:          return("NuppelVideo stream");
+-  case TC_MAGIC_VNC:          return("VNCrec logfile");
+-
+-  case TC_MAGIC_SOCKET:       return("network stream");
+-  case TC_MAGIC_V4L_AUDIO:    return("V4L audio device");
+-  case TC_MAGIC_V4L_VIDEO:    return("V4L video device");
+-  case TC_MAGIC_BKTR_VIDEO:   return("bktr video device");
+-  case TC_MAGIC_SUNAU_AUDIO:  return("sunau audio device");
+-  case TC_MAGIC_BSDAV:        return("bsdav stream");
+-  case TC_MAGIC_OSS_AUDIO:    return("OSS audio device");
+-  case TC_MAGIC_PIPE:         return("pipe/fifo (not seekable)");
+-  case TC_MAGIC_ERROR:        return("error");
+-  case TC_MAGIC_UNKNOWN: 
+-  default:                    return("unknown file type");
+-  }
+-}
+-
+ char *filemagic(long magic)
+ {
+   
+--- origsrc/transcode-1.0.6/import/ioaux.c	2008-01-05 08:37:14.000000000 -0600
++++ src/transcode-1.0.6/import/ioaux.c	2008-07-28 13:10:34.828125000 -0500
+@@ -348,3 +348,65 @@
+ 
+     return(0);
+ }
++
++char *filetype(long magic)
++{
++  
++  switch(magic) {
++    
++  case TC_MAGIC_VOB:          return("MPEG program stream (PS)");
++  case TC_MAGIC_M2V:          return("MPEG elementary stream (ES)");
++  case TC_MAGIC_TS:           return("MPEG transport stream (TS)");
++  case TC_MAGIC_MPEG:         return("MPEG packetized elementary stream (PES)");
++  case TC_MAGIC_AVI:          return("RIFF data, AVI video");
++  case TC_MAGIC_WAV:          return("RIFF data, WAVE audio");
++  case TC_MAGIC_CDXA:         return("RIFF data, CDXA");
++  case TC_MAGIC_MOV:          return("Apple QuickTime movie file");
++  case TC_MAGIC_ASF:          return("advanced streaming format ASF");
++  case TC_MAGIC_TIFF1:
++  case TC_MAGIC_TIFF2:        return("TIFF image");
++  case TC_MAGIC_JPEG:         return("JPEG image");
++  case TC_MAGIC_BMP:          return("BMP image");
++  case TC_MAGIC_PNG:          return("PNG image");
++  case TC_MAGIC_GIF:          return("GIF image");
++  case TC_MAGIC_PPM:          return("PPM image");
++  case TC_MAGIC_PGM:          return("PGM image");
++  case TC_MAGIC_PVN:          return("PVN video");
++  case TC_MAGIC_SGI:          return("SGI image");
++  case TC_MAGIC_RMF:          return("Real Media");
++  case TC_MAGIC_XML:          return("XML file, need to analyze the content");
++  case TC_MAGIC_LAV:          return("LAV Edit List");
++  case TC_MAGIC_MXF:          return("The Material eXchange Format");
++  case TC_MAGIC_OGG:          return("OGG Multimedia Container");
++
++  case TC_MAGIC_RAW:          return("RAW stream");
++  case TC_MAGIC_AC3:          return("AC3 stream");
++  case TC_MAGIC_DTS:          return("DTS stream");
++  case TC_MAGIC_MP3:          return("MPEG-1 layer-3 stream");
++  case TC_MAGIC_MP3_2:        return("MPEG-2 layer-3 stream");
++  case TC_MAGIC_MP3_2_5:      return("MPEG-2.5 layer-3 stream");
++  case TC_MAGIC_MP2:          return("MP2 stream");
++  case TC_MAGIC_ID3:          return("MPEG audio ID3 tag");
++
++  case TC_MAGIC_DV_NTSC:      return("Digital Video (NTSC)");
++  case TC_MAGIC_DV_PAL:       return("Digital Video (PAL)");
++  case TC_MAGIC_DVD:          return("DVD image/device");
++  case TC_MAGIC_DVD_PAL:      return("PAL DVD image/device");
++  case TC_MAGIC_DVD_NTSC:     return("NTSC DVD image/device");
++  case TC_MAGIC_YUV4MPEG:     return("YUV4MPEG stream");
++  case TC_MAGIC_NUV:          return("NuppelVideo stream");
++  case TC_MAGIC_VNC:          return("VNCrec logfile");
++
++  case TC_MAGIC_SOCKET:       return("network stream");
++  case TC_MAGIC_V4L_AUDIO:    return("V4L audio device");
++  case TC_MAGIC_V4L_VIDEO:    return("V4L video device");
++  case TC_MAGIC_BKTR_VIDEO:   return("bktr video device");
++  case TC_MAGIC_SUNAU_AUDIO:  return("sunau audio device");
++  case TC_MAGIC_BSDAV:        return("bsdav stream");
++  case TC_MAGIC_OSS_AUDIO:    return("OSS audio device");
++  case TC_MAGIC_PIPE:         return("pipe/fifo (not seekable)");
++  case TC_MAGIC_ERROR:        return("error");
++  case TC_MAGIC_UNKNOWN: 
++  default:                    return("unknown file type");
++  }
++}
+--- origsrc/transcode-1.0.6/import/nuv/Makefile.am	2008-01-19 04:44:14.000000000 -0600
++++ src/transcode-1.0.6/import/nuv/Makefile.am	2008-07-28 13:10:11.250000000 -0500
+@@ -17,7 +17,7 @@
+ 
+ import_nuv_la_SOURCES = import_nuv.c RTjpegN.c
+ import_nuv_la_CPPFLAGS = $(AM_CPPFLAGS) $(LZO_CFLAGS)
+-import_nuv_la_LDFLAGS = -module -avoid-version
++import_nuv_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ import_nuv_la_LIBADD = $(LZO_LIBS) -lm
+ 
+ EXTRA_DIST =  \
+--- origsrc/transcode-1.0.6/import/v4l/Makefile.am	2004-12-15 22:22:06.000000000 -0600
++++ src/transcode-1.0.6/import/v4l/Makefile.am	2008-07-28 13:10:34.859375000 -0500
+@@ -16,10 +16,10 @@
+ pkg_LTLIBRARIES = $(MOD)
+ 
+ import_v4l_la_SOURCES = import_v4l.c common.c video.c audio.c frequencies.c
+-import_v4l_la_LDFLAGS = -no-undefined -module -avoid-version 
++import_v4l_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+ 
+ import_v4l2_la_SOURCES = import_v4l2.c
+-import_v4l2_la_LDFLAGS = -module -avoid-version 
++import_v4l2_la_LDFLAGS = -module $(PLUGIN_LDFLAGS)
+  
+  
+ EXTRA_DIST = \
+--- origsrc/transcode-1.0.6/src/Makefile.am	2005-04-12 01:19:44.000000000 -0500
++++ src/transcode-1.0.6/src/Makefile.am	2008-07-28 13:10:34.890625000 -0500
+@@ -12,10 +12,14 @@
+ 	$(DLDARWININCL) \
+ 	$(SUPPORT_INCLUDES)
+ 
+-AM_LDFLAGS = -export-dynamic
+-
+ bin_PROGRAMS = transcode
+ 
++if SYSTEM_WIN32
++transcode_LDFLAGS = -Wl,--export-all-symbols -Wl,--out-implib,libtranscode.a
++else
++transcode_LDFLAGS = -export-dynamic
++endif
++
+ transcode_LDADD = \
+ 	$(DLDARWINLIB) \
+ 	$(LIBTC_LIBS) \
+--- origsrc/transcode-1.0.6/src/transcode.h	2005-07-04 02:23:03.000000000 -0500
++++ src/transcode-1.0.6/src/transcode.h	2008-07-28 15:54:29.171875000 -0500
+@@ -604,7 +604,11 @@
+ 
+ #define pow2(b) (((b)==0) ? 1 : 1<<(b))
+ 
++#if defined(__CYGWIN__) && !defined(PIC)
++__declspec(dllexport) int verbose;
++#else
+ extern int verbose;
++#endif
+ extern int pcmswap;
+ extern int rescale;
+ extern int im_clip;
