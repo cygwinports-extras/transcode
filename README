@@ -13,44 +13,44 @@ smoothing, sharpening, denoisifying, and cutting.
 Runtime requirements:
   cygwin-1.5.25-15
   liba52_0-0.7.4-3
-  libavcodec51-13777-1
+  libavcodec52-17736-1
   libdv4-1.0.0-1
-  libdvdread3-0.9.7-1
+  libdvdread4-4.1.3-1
   libfame09-0.9.1-1
-  libfreetype26-2.3.7-1
-  libiconv2-1.11-1
+  libfreetype6-2.3.8-1
+  libiconv2-1.12-1
   libjpeg62-6b-12
   liblzo2_2-2.02-1
-  libMagick1-6.4.0.6-1
+  libMagick1-6.4.8.3-1
   libmjpegtools19-1.9.0rc3-1
   libmp3lame0-3.97-1
   libmpeg2_0-0.4.0b-1
   libmpeg3_2-1.7-1
   libogg0-1.1.3-1
-  libpostproc51-13777-1
-  libquicktime0-1.0.2-2
-  libSDL12-1.2.13-1
+  libpostproc51-17736-1
+  libquicktime0-1.1.1-2
+  libSDL1.2_0-1.2.13-2
   libtheora0-1.0beta3-1
   libvorbis0-1.2.0-2
   libvorbisfile3-1.2.0-2
-  libX11_6-1.1.3-1
-  libXaw8-1.0.4-1
-  libxml2-2.6.32-1
+  libX11_6-1.1.5-2
+  libXaw7-1.0.5-1
+  libxml2-2.7.2-1
   libXt6-1.0.5-1
-  mplayer-24790-1
+  mplayer
   toolame-0.2l-1
 
 Build requirements:
 (besides corresponding -devel packages)
-  autoconf2.5-2.61-1
-  automake1.8-1.8.5-3
-  binutils-20080523-2
-  cygport-0.3.12-1
+  autoconf2.5-2.63-1
+  automake1.8-1.8.5-4
+  binutils-20080624-2
+  cygport-0.4.3-1
   gawk-3.1.6-1
   gcc-core-3.4.4-3
   gcc-g++-3.4.4-3
-  libtool-2.2.2-2
-  make-3.81-1
+  libtool-2.2.6a-1
+  make-3.81-2
   pkg-config-0.23a-2
   sed-4.1.5-2
 
@@ -63,15 +63,15 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack transcode-1.0.6-X-src.tar.bz2
+  unpack transcode-1.0.7-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./transcode-1.0.6-X.cygport all
+  cygport ./transcode-1.0.7-X.cygport all
 
 This will create:
-  /usr/src/transcode-1.0.6-X-src.tar.bz2
-  /usr/src/transcode-1.0.6-X.tar.bz2
+  /usr/src/transcode-1.0.7-X-src.tar.bz2
+  /usr/src/transcode-1.0.7-X.tar.bz2
 
 -------------------------------------------
 
@@ -365,92 +365,92 @@ Files included in the binary package:
   /usr/lib/transcode/xvid2.cfg
   /usr/lib/transcode/xvid3.cfg
   /usr/lib/transcode/xvid4.cfg
-  /usr/share/doc/transcode-1.0.6/AUTHORS
-  /usr/share/doc/transcode-1.0.6/COPYING
-  /usr/share/doc/transcode-1.0.6/ChangeLog
-  /usr/share/doc/transcode-1.0.6/DV-to-DVD-HOWTO.txt
-  /usr/share/doc/transcode-1.0.6/INSTALL
-  /usr/share/doc/transcode-1.0.6/OPTIMIZERS
-  /usr/share/doc/transcode-1.0.6/README
-  /usr/share/doc/transcode-1.0.6/README.Inverse.Telecine.txt
-  /usr/share/doc/transcode-1.0.6/README.cluster
-  /usr/share/doc/transcode-1.0.6/README.dv
-  /usr/share/doc/transcode-1.0.6/README.filter.modfps
-  /usr/share/doc/transcode-1.0.6/README.rip
-  /usr/share/doc/transcode-1.0.6/README.sync
-  /usr/share/doc/transcode-1.0.6/README.vcd
-  /usr/share/doc/transcode-1.0.6/README.xvid-credits
-  /usr/share/doc/transcode-1.0.6/TODO
-  /usr/share/doc/transcode-1.0.6/architecture.txt
-  /usr/share/doc/transcode-1.0.6/avi_comments.txt
-  /usr/share/doc/transcode-1.0.6/clone.txt
-  /usr/share/doc/transcode-1.0.6/export-API.txt
-  /usr/share/doc/transcode-1.0.6/export_ffmpeg.txt
-  /usr/share/doc/transcode-1.0.6/export_mp2.txt
-  /usr/share/doc/transcode-1.0.6/export_mpeg.txt
-  /usr/share/doc/transcode-1.0.6/export_pvm.txt
-  /usr/share/doc/transcode-1.0.6/faq
-  /usr/share/doc/transcode-1.0.6/filter-API.txt
-  /usr/share/doc/transcode-1.0.6/filter-socket.txt
-  /usr/share/doc/transcode-1.0.6/filter_dnr.txt
-  /usr/share/doc/transcode-1.0.6/filter_logo.txt
-  /usr/share/doc/transcode-1.0.6/filter_logoaway.txt
-  /usr/share/doc/transcode-1.0.6/filter_text.txt
-  /usr/share/doc/transcode-1.0.6/filter_yuvdenoise.txt
-  /usr/share/doc/transcode-1.0.6/framerate.txt
-  /usr/share/doc/transcode-1.0.6/html/dv.html
-  /usr/share/doc/transcode-1.0.6/html/dvd.html
-  /usr/share/doc/transcode-1.0.6/html/export_divx.html
-  /usr/share/doc/transcode-1.0.6/html/export_divx4.php
-  /usr/share/doc/transcode-1.0.6/html/export_divx5.php
-  /usr/share/doc/transcode-1.0.6/html/export_fame.php
-  /usr/share/doc/transcode-1.0.6/html/export_ogg.php
-  /usr/share/doc/transcode-1.0.6/html/export_opendivx.php
-  /usr/share/doc/transcode-1.0.6/html/export_xvid.php
-  /usr/share/doc/transcode-1.0.6/html/import_avi.html
-  /usr/share/doc/transcode-1.0.6/html/import_dv.html
-  /usr/share/doc/transcode-1.0.6/html/import_dvd.html
-  /usr/share/doc/transcode-1.0.6/html/import_mp3.html
-  /usr/share/doc/transcode-1.0.6/html/import_mpeg2.html
-  /usr/share/doc/transcode-1.0.6/html/import_mpeg3.html
-  /usr/share/doc/transcode-1.0.6/html/import_null.html
-  /usr/share/doc/transcode-1.0.6/html/import_nuv.html
-  /usr/share/doc/transcode-1.0.6/html/import_ogg.php
-  /usr/share/doc/transcode-1.0.6/html/import_raw.html
-  /usr/share/doc/transcode-1.0.6/html/import_vob.html
-  /usr/share/doc/transcode-1.0.6/html/import_yuv4mpeg.html
-  /usr/share/doc/transcode-1.0.6/html/index.html
-  /usr/share/doc/transcode-1.0.6/html/intro.html
-  /usr/share/doc/transcode-1.0.6/html/mes0-00000.png
-  /usr/share/doc/transcode-1.0.6/html/mes4-00000.png
-  /usr/share/doc/transcode-1.0.6/html/mes5-00000.png
-  /usr/share/doc/transcode-1.0.6/html/mes6-00000.png
-  /usr/share/doc/transcode-1.0.6/html/mes7-00000.png
-  /usr/share/doc/transcode-1.0.6/html/misc.html
-  /usr/share/doc/transcode-1.0.6/html/modules.html
-  /usr/share/doc/transcode-1.0.6/html/mpeg.html
-  /usr/share/doc/transcode-1.0.6/html/new.png
-  /usr/share/doc/transcode-1.0.6/html/other.html
-  /usr/share/doc/transcode-1.0.6/html/post.html
-  /usr/share/doc/transcode-1.0.6/html/pre.html
-  /usr/share/doc/transcode-1.0.6/html/smart.html
-  /usr/share/doc/transcode-1.0.6/html/sorry.html
-  /usr/share/doc/transcode-1.0.6/html/sub0-00000.png
-  /usr/share/doc/transcode-1.0.6/html/sub1-00000.png
-  /usr/share/doc/transcode-1.0.6/html/sub2-00000.png
-  /usr/share/doc/transcode-1.0.6/html/sub3-00000.png
-  /usr/share/doc/transcode-1.0.6/html/subtitles.html
-  /usr/share/doc/transcode-1.0.6/html/table.php
-  /usr/share/doc/transcode-1.0.6/html/tc.png
-  /usr/share/doc/transcode-1.0.6/ibp_support.txt
-  /usr/share/doc/transcode-1.0.6/import-API.txt
-  /usr/share/doc/transcode-1.0.6/import-xml.txt
-  /usr/share/doc/transcode-1.0.6/import_nvrec.txt
-  /usr/share/doc/transcode-1.0.6/import_v4l2.txt
-  /usr/share/doc/transcode-1.0.6/import_yuv.txt
-  /usr/share/doc/transcode-1.0.6/pvm.cfg
-  /usr/share/doc/transcode-1.0.6/release-notes/README-0.6.13
-  /usr/share/doc/transcode-1.0.6/template.cfg.txt
+  /usr/share/doc/transcode-1.0.7/AUTHORS
+  /usr/share/doc/transcode-1.0.7/COPYING
+  /usr/share/doc/transcode-1.0.7/ChangeLog
+  /usr/share/doc/transcode-1.0.7/DV-to-DVD-HOWTO.txt
+  /usr/share/doc/transcode-1.0.7/INSTALL
+  /usr/share/doc/transcode-1.0.7/OPTIMIZERS
+  /usr/share/doc/transcode-1.0.7/README
+  /usr/share/doc/transcode-1.0.7/README.Inverse.Telecine.txt
+  /usr/share/doc/transcode-1.0.7/README.cluster
+  /usr/share/doc/transcode-1.0.7/README.dv
+  /usr/share/doc/transcode-1.0.7/README.filter.modfps
+  /usr/share/doc/transcode-1.0.7/README.rip
+  /usr/share/doc/transcode-1.0.7/README.sync
+  /usr/share/doc/transcode-1.0.7/README.vcd
+  /usr/share/doc/transcode-1.0.7/README.xvid-credits
+  /usr/share/doc/transcode-1.0.7/TODO
+  /usr/share/doc/transcode-1.0.7/architecture.txt
+  /usr/share/doc/transcode-1.0.7/avi_comments.txt
+  /usr/share/doc/transcode-1.0.7/clone.txt
+  /usr/share/doc/transcode-1.0.7/export-API.txt
+  /usr/share/doc/transcode-1.0.7/export_ffmpeg.txt
+  /usr/share/doc/transcode-1.0.7/export_mp2.txt
+  /usr/share/doc/transcode-1.0.7/export_mpeg.txt
+  /usr/share/doc/transcode-1.0.7/export_pvm.txt
+  /usr/share/doc/transcode-1.0.7/faq
+  /usr/share/doc/transcode-1.0.7/filter-API.txt
+  /usr/share/doc/transcode-1.0.7/filter-socket.txt
+  /usr/share/doc/transcode-1.0.7/filter_dnr.txt
+  /usr/share/doc/transcode-1.0.7/filter_logo.txt
+  /usr/share/doc/transcode-1.0.7/filter_logoaway.txt
+  /usr/share/doc/transcode-1.0.7/filter_text.txt
+  /usr/share/doc/transcode-1.0.7/filter_yuvdenoise.txt
+  /usr/share/doc/transcode-1.0.7/framerate.txt
+  /usr/share/doc/transcode-1.0.7/html/dv.html
+  /usr/share/doc/transcode-1.0.7/html/dvd.html
+  /usr/share/doc/transcode-1.0.7/html/export_divx.html
+  /usr/share/doc/transcode-1.0.7/html/export_divx4.php
+  /usr/share/doc/transcode-1.0.7/html/export_divx5.php
+  /usr/share/doc/transcode-1.0.7/html/export_fame.php
+  /usr/share/doc/transcode-1.0.7/html/export_ogg.php
+  /usr/share/doc/transcode-1.0.7/html/export_opendivx.php
+  /usr/share/doc/transcode-1.0.7/html/export_xvid.php
+  /usr/share/doc/transcode-1.0.7/html/import_avi.html
+  /usr/share/doc/transcode-1.0.7/html/import_dv.html
+  /usr/share/doc/transcode-1.0.7/html/import_dvd.html
+  /usr/share/doc/transcode-1.0.7/html/import_mp3.html
+  /usr/share/doc/transcode-1.0.7/html/import_mpeg2.html
+  /usr/share/doc/transcode-1.0.7/html/import_mpeg3.html
+  /usr/share/doc/transcode-1.0.7/html/import_null.html
+  /usr/share/doc/transcode-1.0.7/html/import_nuv.html
+  /usr/share/doc/transcode-1.0.7/html/import_ogg.php
+  /usr/share/doc/transcode-1.0.7/html/import_raw.html
+  /usr/share/doc/transcode-1.0.7/html/import_vob.html
+  /usr/share/doc/transcode-1.0.7/html/import_yuv4mpeg.html
+  /usr/share/doc/transcode-1.0.7/html/index.html
+  /usr/share/doc/transcode-1.0.7/html/intro.html
+  /usr/share/doc/transcode-1.0.7/html/mes0-00000.png
+  /usr/share/doc/transcode-1.0.7/html/mes4-00000.png
+  /usr/share/doc/transcode-1.0.7/html/mes5-00000.png
+  /usr/share/doc/transcode-1.0.7/html/mes6-00000.png
+  /usr/share/doc/transcode-1.0.7/html/mes7-00000.png
+  /usr/share/doc/transcode-1.0.7/html/misc.html
+  /usr/share/doc/transcode-1.0.7/html/modules.html
+  /usr/share/doc/transcode-1.0.7/html/mpeg.html
+  /usr/share/doc/transcode-1.0.7/html/new.png
+  /usr/share/doc/transcode-1.0.7/html/other.html
+  /usr/share/doc/transcode-1.0.7/html/post.html
+  /usr/share/doc/transcode-1.0.7/html/pre.html
+  /usr/share/doc/transcode-1.0.7/html/smart.html
+  /usr/share/doc/transcode-1.0.7/html/sorry.html
+  /usr/share/doc/transcode-1.0.7/html/sub0-00000.png
+  /usr/share/doc/transcode-1.0.7/html/sub1-00000.png
+  /usr/share/doc/transcode-1.0.7/html/sub2-00000.png
+  /usr/share/doc/transcode-1.0.7/html/sub3-00000.png
+  /usr/share/doc/transcode-1.0.7/html/subtitles.html
+  /usr/share/doc/transcode-1.0.7/html/table.php
+  /usr/share/doc/transcode-1.0.7/html/tc.png
+  /usr/share/doc/transcode-1.0.7/ibp_support.txt
+  /usr/share/doc/transcode-1.0.7/import-API.txt
+  /usr/share/doc/transcode-1.0.7/import-xml.txt
+  /usr/share/doc/transcode-1.0.7/import_nvrec.txt
+  /usr/share/doc/transcode-1.0.7/import_v4l2.txt
+  /usr/share/doc/transcode-1.0.7/import_yuv.txt
+  /usr/share/doc/transcode-1.0.7/pvm.cfg
+  /usr/share/doc/transcode-1.0.7/release-notes/README-0.6.13
+  /usr/share/doc/transcode-1.0.7/template.cfg.txt
   /usr/share/man/man1/avifix.1.gz
   /usr/share/man/man1/aviindex.1.gz
   /usr/share/man/man1/avimerge.1.gz
@@ -470,6 +470,9 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 1.0.7-1 -----
+Version bump.
 
 ----- version 1.0.6-1 -----
 Version bump.

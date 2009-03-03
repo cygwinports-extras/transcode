@@ -5,7 +5,6 @@ PATCH_URI="
 	1.0.6-no-undefined.patch
 	1.0.6-imagemagick-configure.patch
 	1.0.6-lseek64.patch
-	1.0.6-postproc-include.patch
 	1.0.6-import_lzo.patch
 "
 
