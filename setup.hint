@@ -1,5 +1,5 @@
 category: Audio Video
-requires: cygwin libMagick1 libSDL1.2_0 libX11_6 libXaw7 libXt6 liba52_0 libavcodec52 libdv4 libdvdread4 libfame09 libfreetype6 libiconv2 libjpeg62 liblzo2_2 libmjpegtools19 libmp3lame0 libmpeg2_0 libmpeg3_2 libogg0 libpostproc51 libquicktime0 libtheora0 libvorbis0 libvorbisfile3 libxml2 toolame
+requires: libMagick1 libSDL1.2_0 libX11_6 libXaw7 libXt6 liba52_0 libavcodec52 libdv4 libdvdread4 libfame09 libfreetype6 libiconv2 libjpeg62 liblzo2_2 libmjpegtools19 libmp3lame0 libmpeg2_0 libmpeg3_2 libogg0 libpostproc51 libquicktime0 libtheora0 libvorbis0 libvorbisfile3 libxml2 toolame
 sdesc: "Audio/video codec transcoder"
 ldesc: "Transcode is a suite of tools, all of which are command line 
 utilities, for transcoding various video, audio, and container formats, 
